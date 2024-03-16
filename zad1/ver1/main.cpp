@@ -94,6 +94,7 @@ void checkMsg (vector<int> &T){
 
 int main() {
 
+    cout << "Kodowanie:" <<endl;
     vector<int> input;
     string txt = "11000101";
     txtToInt(input, txt);
@@ -103,11 +104,11 @@ int main() {
     }
 //    system("pause");
     cout<<endl;
-
+    cout << "Dekodowanie:" <<endl;
     vector<int> invalidInput;
     string valid = "110001010111";
     string invalid = "11000010111";
-    txtToInt(invalidInput, invalid);
+    txtToInt(invalidInput, valid);
     checkMsg(invalidInput);
     return 0;
 }
