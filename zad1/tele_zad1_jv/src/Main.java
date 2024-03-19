@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main {
 
@@ -91,14 +92,34 @@ public class Main {
     }
 
     public static void main(String[] args) {
-
-        //System.out.println(Arrays.toString(readFile("input.txt")));
-        //createFile(readFile("input.txt"));
         int[] bits = readFile("input.txt");
         System.out.println("Tekst oryg: " + Arrays.toString(bits));
+        //int[] testBits = {1,1,1,0,0,0,0,0,1,1,1,1,1,1,1};
+        //System.out.println(Arrays.toString(readFile("input.txt")));
+        //createFile(readFile("input.txt"));
+        //
+        //ArrayList<Integer> encoded = oneBit.encode(bits);
+        //System.out.println("Zakodowane: " + encoded);
+        //System.out.println("Dekodowanie: ");
+        //int[] inv = {1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1};
+        //ArrayList<Integer> invalid = new ArrayList<>();
+        //for (int i = 0; i < inv.length; i++) {
+        //    invalid.add(inv[i]);
+        //}
+        //System.out.println(invalid.toString());
+        //oneBit.checkMsg(invalid);
+        ArrayList<Integer> tbc = twoBit.encode(bits);
+        int[] tbcBits = new int[tbc.size()];
+        for (int i = 0; i < tbcBits.length; i++) {
+            tbcBits[i] = tbc.get(i);
+        }
+        //System.out.println();
+        tbcBits[0] = 1;
+        //tbcBits[5] = 1;
+        //createFile(tbcBits);
+        ArrayList<Integer> decd = twoBit.decode(tbcBits);
+        System.out.println(decd);
 
-        ArrayList<Integer> encoded = oneBit.encode(bits);
-        System.out.println("Zakodowane: " + encoded);
     }
 
 

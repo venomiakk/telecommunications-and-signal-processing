@@ -109,6 +109,7 @@ void checkMsg (vector<int> &T){
     for (int i = 0; i < sbH_ROWS; ++i) {
         E.push_back(multiplyVectors(T, i) + T[8+i]);
         E[i] = E[i] % 2;
+        cout<<E[i]<<", ";
         sum += E[i];
     }
 
@@ -138,9 +139,9 @@ int main() {
     cout<<endl;
     cout << "Dekodowanie:" <<endl;
     vector<int> invalidInput;
-    string valid = "110001011100";
+    string valid = "011000010011";
     string invalid = "111001011100";
-    txtToInt(invalidInput, invalid);
+    txtToInt(invalidInput, valid);
     checkMsg(invalidInput);
     return 0;
 }
