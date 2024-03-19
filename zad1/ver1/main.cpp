@@ -126,14 +126,14 @@ void checkMsg (vector<int> &T){
 
 int main() {
 
-//    cout << "Kodowanie:" <<endl;
-//    vector<int> input;
-//    string txt = "11000101";
-//    txtToInt(input, txt);
-//    encode(input);
-//    for (int i = 0; i < input.size(); ++i) {
-//        cout << input[i];
-//    }
+    cout << "Kodowanie:" <<endl;
+    vector<int> input;
+    string txt = "01100001";
+    txtToInt(input, txt);
+    encode(input);
+    for (int i = 0; i < input.size(); ++i) {
+        cout << input[i];
+    }
 //    system("pause");
     cout<<endl;
     cout << "Dekodowanie:" <<endl;
