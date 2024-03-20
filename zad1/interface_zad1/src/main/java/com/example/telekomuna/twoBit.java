@@ -8,17 +8,6 @@ abstract public class twoBit {
     private static final int H_ROWS = 8;
     private static final int H_COLUMNS = 16; /* 8 bitów wiadomości oraz 8 bitów parzystości */
 
-    //private static final int[][] H = {
-    //        {1, 1, 1, 1, 1, 1, 1, 1,    1, 0, 0, 0, 0, 0, 0, 0},
-    //        {1, 1, 0, 1, 1, 1, 1, 1,    0, 1, 0, 0, 0, 0, 0, 0},
-    //        {1, 1, 0, 1, 1, 1, 0, 1,    0, 0, 1, 0, 0, 0, 0, 0},
-    //        {1, 1, 0, 1, 0, 1, 0, 1,    0, 0, 0, 1, 0, 0, 0, 0},
-    //        {1, 0, 0, 1, 0, 1, 0, 1,    0, 0, 0, 0, 1, 0, 0, 0},
-    //        {1, 0, 0, 1, 0, 1, 0, 0,    0, 0, 0, 0, 0, 1, 0, 0},
-    //        {1, 0, 0, 1, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 1, 0},
-    //        {1, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 1}
-    //};
-
     private static final int[][] H = {
             {0, 1, 1, 1, 1, 1, 1, 1,    1, 0, 0, 0, 0, 0, 0, 0},
             {1, 0, 1, 1, 1, 1, 1, 1,    0, 1, 0, 0, 0, 0, 0, 0},
@@ -30,7 +19,12 @@ abstract public class twoBit {
             {1, 1, 1, 1, 1, 1, 1, 0,    0, 0, 0, 0, 0, 0, 0, 1},
     };
 
-
+    /*
+     * Kodowanie podanej wiadomości poprzez dodanie bitów parzystości
+     * Jest to rozwiązane poprzez mnożenie wektorów
+     * Każdy wiersz macierzy H jest mnożony przez wektor wiadomości T
+     * Następnie z sumy elementów wektora wyjściowego wyciągana jest wartość 0 lub 1 poprzez operację modulo 2
+     */
     static ArrayList<Integer> encode(int[] paramBits) {
         ArrayList<Integer> output = new ArrayList<>();
         int[] msgBits = new int[paramBits.length];
@@ -38,9 +32,8 @@ abstract public class twoBit {
             msgBits[i] = paramBits[i];
         }
         //int blocks = (msgBits.length / 8) + (msgBits.length % 8 == 0 ? 0 : 1);
-        int blocks = msgBits.length / 8; //Zakładamy że zawsze plik będzie miał rozmiar wielokrotności 8
-        //System.out.println(msgBits.length);
-        //System.out.println(blocks);
+        int blocks = msgBits.length / 8;
+
 
 
         int index = 0;
@@ -71,6 +64,10 @@ abstract public class twoBit {
         return output;
     }
 
+    /*
+    *   Funkcja odpowiedzialna za dekodowanie wiadomości
+    *   Zwraca odkodowany i poprawiony tekst
+    */
     static ArrayList<Integer> decode(int[] bits) {
         ArrayList<Integer> output = new ArrayList<>();
         int blocks = bits.length / 16;
@@ -89,17 +86,25 @@ abstract public class twoBit {
         return output;
     }
 
+    /*
+     * Funkcja odpowiedzialna za mnożenie wektorów
+     * Nie uwzględnia bitów parzystości, wykorzystwywana przy kodowaniu
+     */
     static int multiplyVectors(int[] T, int row) {
         int output = 0;
-        //TODO: Czy trzeba zmienić dla 2 bitów?
         for (int i = 0; i < 8; i++) {
             output += H[row][i] * T[i];
         }
-        //System.out.println(output + " " + output % 2);
         return output % 2;
     }
 
 
+    /*
+     * Funkcja odpowiedzialna za sprawdzenie czy wiadomosc jest poprawna
+     * Rzędy macierzy H są mnożone z wektorem wiadomości T a do wyniku dodawany jest odpowiedni bit parzystości
+     * Gdy suma elementów wektora wyjściowego jest równa 0, wtedy błąd nie wystąpił
+     * Gdy suma nie jest równa 0, następuje poprawienie wiadomości
+     */
     static int[] checkMsg(int[] block) {
         int[] T = new int[H_COLUMNS];
         for (int i = 0; i < block.length; i++) {
@@ -121,9 +126,6 @@ abstract public class twoBit {
                 correct2bits(E, T);
             }
 
-
-            //System.out.println(Arrays.toString(T));
-            //T = correctMsg(E, T);
         }
         int[] T2 = new int[8];
         for (int i = 0; i < T2.length; i++) {
@@ -132,16 +134,23 @@ abstract public class twoBit {
         return T2;
     }
 
+    /*
+     * Funkcja odpowiedzialna za mnożenie wektorów
+     * Uwzględnia bity parzystości i jest wykorzystywana przy dekodowaniu
+     */
     static int multiplyVectors2(int[] T, int row) {
         int output = 0;
         for (int i = 0; i < 16; i++) {
             output += H[row][i] * T[i];
         }
-        //System.out.println(output + " " + output % 2);
         return output % 2;
     }
 
-
+    /*
+     *  Funkcja odpowiadająca za poprawianie wiadomości, gdy wystąpi 1 błąd
+     *  Wektor błędów porównywany jest z odpowiednią kolumną macierzy H
+     *  Gdy wektory są sobie równe, błąd wystąpił na miejscu odpowiadającym danej kolumnie macierzy H
+     */
     static boolean correct1bit(int[] E, int[] T) {
         int errors = 0;
         for (int i = 0; i < 8; i++) {
@@ -168,6 +177,11 @@ abstract public class twoBit {
         return false;
     }
 
+    /*
+     *  Funkcja odpowiadająca za poprawianie wiadomości, gdy wystąpią 2 błędy
+     *  Poszukiwane są dwie takie kolumny macierzy H, które dodane do siebie dadzą wektor błędu E
+     *  Wtedy wiadomo, że błędy wystąpiły na tych 2 pozycjach
+     */
     static void correct2bits(int[] E, int[] T){
         int col1, col2;
         // Tablica wyników

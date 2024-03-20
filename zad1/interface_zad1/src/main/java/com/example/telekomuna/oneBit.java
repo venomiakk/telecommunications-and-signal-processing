@@ -15,6 +15,12 @@ abstract public class oneBit {
     };
 
 
+    /*
+     * Kodowanie podanej wiadomości poprzez dodanie bitów parzystości
+     * Jest to rozwiązane poprzez mnożenie wektorów
+     * Każdy wiersz macierzy H jest mnożony przez wektor wiadomości T
+     * Następnie z sumy elementów wektora wyjściowego wyciągana jest wartość 0 lub 1 poprzez operację modulo 2
+     */
     static ArrayList<Integer> encode(int[] paramBits) {
         ArrayList<Integer> interim = new ArrayList<>();
 
@@ -29,8 +35,6 @@ abstract public class oneBit {
             interim.add(msgBits[i]);
         }
 
-    //TODO: podzielić na bloki po 8 bitów i kodować każdy pojedyńczo
-    //    Tablica ArrayList?
 
         int[] parityBits = new int[H_ROWS];
         for (int i = 0; i < H_ROWS; i++) {
@@ -46,22 +50,29 @@ abstract public class oneBit {
 
     void decode() {}
 
+    /*
+     * Funkcja odpowiedzialna za mnożenie wektorów
+     */
     static int multiplyVectors(int[] T, int row){
         int output = 0;
-        //TODO: Czy trzeba zmienić dla 2 bitów?
         for (int i = 0; i < 8; i++) {
             output += H[row][i] * T[i];
         }
         return output%2;
     }
 
+    /*
+     * Funkcja odpowiedzialna za sprawdzenie czy wiadomosc jest poprawna
+     * Rzędy macierzy H są mnożone z wektorem wiadomości T a do wyniku dodawany jest odpowiedni bit parzystości
+     * Gdy suma elementów wektora wyjściowego jest równa 0, wtedy błąd nie wystąpił
+     * Gdy suma nie jest równa 0, następuje poprawienie wiadomości
+     */
     static int[] checkMsg(ArrayList<Integer> block){
-        int[] T = new int[H_COLUMNS]; //TODO:Zamienić na 16 dla 2 bitów
+        int[] T = new int[H_COLUMNS];
         for (int i = 0; i < block.size(); i++) {
             T[i] = block.get(i);
         }
         System.out.println(Arrays.toString(T));
-        //TODO zamienić na 8 dla korekcji 2 bitów
         int[] E = new int[H_ROWS];
         int sum = 0;
         for (int i = 0; i < H_ROWS; i++) {
@@ -84,6 +95,11 @@ abstract public class oneBit {
         return T2;
     }
 
+    /*
+     * Funkcja odpowiadająca za poprawianie wiadomości
+     * Wektor błędów porównywany jest z odpowiednią kolumną macierzy H
+     * Gdy wektory są sobie równe, błąd wystąpił na miejscu odpowiadającym danej kolumnie macierzy H
+     */
     static void correctMsg(int[] E, int[] T){
         int errors = 0;
         for (int i = 0; i < 8; i++) {
