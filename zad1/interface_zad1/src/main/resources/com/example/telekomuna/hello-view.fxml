@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="614.0" prefWidth="653.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.telekomuna.HelloController">
+   <children>
+      <VBox prefHeight="640.0" prefWidth="231.0">
+         <children>
+            <Button fx:id="chooseFile" contentDisplay="CENTER" mnemonicParsing="false" onAction="#setChooseFile" prefHeight="26.0" prefWidth="139.0" text="Wybierz plik">
+               <VBox.margin>
+                  <Insets left="30.0" top="250.0" />
+               </VBox.margin>
+            </Button>
+            <TextField fx:id="fileName" editable="false" text="nie wybrano pliku" />
+            <Button fx:id="loadFile" mnemonicParsing="false" onAction="#load" prefHeight="26.0" prefWidth="88.0" text="wczytaj ">
+               <VBox.margin>
+                  <Insets left="65.0" top="50.0" />
+               </VBox.margin>
+            </Button>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Maksymilian Paluskiewicz">
+               <VBox.margin>
+                  <Insets top="200.0" />
+               </VBox.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Adrian Michalek" />
+         </children>
+      </VBox>
+      <VBox prefHeight="614.0" prefWidth="194.0">
+         <children>
+            <RadioButton fx:id="encode" mnemonicParsing="false" prefWidth="82.0" text="koduj">
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin>
+            </RadioButton>
+            <HBox prefHeight="597.0" prefWidth="202.0">
+               <children>
+                  <TextArea fx:id="area1" prefHeight="597.0" prefWidth="132.0" />
+                  <Button fx:id="execute" mnemonicParsing="false" onAction="#onExecuteClick" text="wykonaj">
+                     <HBox.margin>
+                        <Insets top="280.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox prefHeight="611.0" prefWidth="208.0">
+         <children>
+            <RadioButton fx:id="decode" mnemonicParsing="false" text="dekoduj">
+               <VBox.margin>
+                  <Insets left="50.0" />
+               </VBox.margin>
+            </RadioButton>
+            <HBox prefHeight="610.0" prefWidth="387.0">
+               <children>
+                  <TextArea fx:id="area2" prefHeight="597.0" prefWidth="139.0" />
+                  <Button fx:id="saveFile" mnemonicParsing="false" onAction="#onSaveClick" prefHeight="26.0" prefWidth="62.0" text="zapisz">
+                     <HBox.margin>
+                        <Insets top="280.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</HBox>

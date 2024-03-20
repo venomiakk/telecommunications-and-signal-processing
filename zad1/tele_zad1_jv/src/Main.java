@@ -36,37 +36,7 @@ public class Main {
     }
 
     static void createFile(int[] fileBits) {
-
-        // Ścieżka do pliku wyjściowego
         String outputPath = "output.txt";
-
-        //bity
-        //// Konwersja tablicy bitów na ciąg znaków
-        //StringBuilder stringBuilder = new StringBuilder();
-        //for (int b : fileBits) {
-        //    stringBuilder.append(b);
-        //}
-        //String content = stringBuilder.toString();
-        //
-        //
-        //try {
-        //    // Tworzenie strumienia FileOutputStream
-        //    FileOutputStream fileOutputStream = new FileOutputStream(outputPath);
-        //
-        //    // Zapisywanie danych z tablicy bitów do pliku
-        //    fileOutputStream.write(content.getBytes("UTF-8"));
-        //
-        //    // Zamykanie strumienia
-        //    fileOutputStream.close();
-        //
-        //    System.out.println("Tablica bitów została zapisana jako znaki w pliku.");
-        //
-        //} catch (IOException e) {
-        //    e.printStackTrace();
-        //}
-
-        //znaki
-        // Konwersja tablicy bitów na ciąg bajtów
         byte[] bytes = new byte[fileBits.length / 8]; // Dziel przez 8, ponieważ potrzebujemy 8 bitów na bajt
         for (int i = 0; i < fileBits.length / 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -75,17 +45,10 @@ public class Main {
         }
 
         try {
-            // Tworzenie strumienia FileOutputStream
             FileOutputStream fileOutputStream = new FileOutputStream(outputPath);
-
-            // Zapisywanie danych z tablicy bitów do pliku jako znaki w kodowaniu UTF-8
             fileOutputStream.write(bytes);
-
-            // Zamykanie strumienia
             fileOutputStream.close();
-
             System.out.println("Tablica bitów została zapisana jako znaki w pliku.");
-
         } catch (IOException e) {
             e.printStackTrace();
         }
