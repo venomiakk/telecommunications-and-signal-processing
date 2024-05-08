@@ -103,10 +103,52 @@ string decode_file(struct TNODE *root, string s)
     return ans + '\0';
 }
 
+string codeFile(vector<char> input)
+{
+    string str;
+    for (auto c : input)
+    {
+        str += c;
+    }
+
+    calcFreq(str, str.length());
+    HuffmanCodes(str.length());
+
+    vector<bool> tmp;
+    string encodedStr;
+    for (auto i : str)
+    {
+        encodedStr += codes[i];
+    }
+
+    for (auto c : encodedStr)
+    {
+        tmp.push_back(c == '1');
+    }
+
+    string tmpS;
+    for (auto c : tmp)
+    {
+        tmpS += (c) ? '1' : '0';
+    }
+
+    // cout << "Huffman: " + encodedStr << endl;
+    return tmpS;
+}
+
+map<char, string> getDict()
+{
+//     cout << "Character With there Frequencies:\n";
+//     for (auto v = codes.begin(); v != codes.end(); v++)
+//         cout << v->first << ' ' << v->second << endl;
+//     cout << endl;
+    return codes;
+}
+
 int huffmanGFG()
 {
+    string str;
     vector<char> file = readFile("input.txt");
-    string str = "";
     for (auto c : file)
     {
         str += c;
@@ -124,9 +166,9 @@ int huffmanGFG()
 
     cout << "\nEncoded Huffman data:\n"
          << encodedString << endl;
-    saveBitsToFile(encodedString, "bits.txt");
+    // saveBitsToFile(encodedString, "bits.txt");
     // Function call
-    encodedString = readBitsFromFile("bits.txt");
+    // encodedString = readBitsFromFile("bits.txt");
     decodedString = decode_file(minHeap.top(), encodedString);
     cout << "\nDecoded Huffman Data:\n"
          << decodedString << endl;

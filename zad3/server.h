@@ -1,6 +1,7 @@
 #ifndef ZAD3_SERVER_H
 #define ZAD3_SERVER_H
 #include <winsock2.h>
+#include <vector>
 
 SOCKET initializeServer();
 

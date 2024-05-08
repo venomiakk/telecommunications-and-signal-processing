@@ -1,6 +1,8 @@
 #ifndef ZAD3_HUFFMAN_H
 #define ZAD3_HUFFMAN_H
 
+#include <map>
+
 /*!
  * @brief Galaz drzewa Huffmana
  */
@@ -41,6 +43,10 @@ void HuffmanCodes(int size);
 void calcFreq(std::string str, int n);
 
 std::string decode_file(struct TNODE *root, std::string s);
+
+std::string codeFile(std::vector<char> input);
+
+std::map<char, std::string> getDict();
 
 // TESTING FUNCTIONS
 int huffmanGFG();

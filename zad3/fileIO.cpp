@@ -86,7 +86,49 @@ std::string readBitsFromFile(const std::string &filename)
     return bits;
 }
 
-void test()
+void saveDictToFile(std::vector<HuffmanDictElement> dict, std::string filepath)
 {
-    cout << "Test";
+    vector<char> tmp;
+    for (auto line : dict)
+    {
+        int decKey = static_cast<int>(line.key);
+        string key = to_string(decKey);
+        for (auto c : key)
+        {
+            tmp.push_back(c);
+        }
+        tmp.push_back(':');
+        for (auto c : line.value)
+        {
+            tmp.push_back(c);
+        }
+        tmp.push_back('\n');
+    }
+    saveFile(filepath, tmp);
+}
+
+std::vector<HuffmanDictElement> readDictFromFile(std::string filepath)
+{
+    vector<HuffmanDictElement> dict;
+    ifstream file(filepath);
+    string line;
+    char delimiter = ':';
+    while (getline(file, line))
+    {
+        if (line == "")
+        {
+            break;
+        }
+
+        size_t pos = line.rfind(delimiter);
+        string key = line.substr(0, pos);
+        string value = line.substr(pos + 1);
+        int keyByte = stoi(key);
+        char keyChar = static_cast<char>(keyByte);
+        HuffmanDictElement element;
+        element.key = keyChar;
+        element.value = value;
+        dict.push_back(element);
+    }
+    return dict;
 }

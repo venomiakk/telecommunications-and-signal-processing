@@ -10,6 +10,11 @@ set(PROG_SRCS
     client.h
     huffman.cpp
     huffman.h
+    typedefs.h
+    huffSender.cpp
+    huffSender.h
+    huffReceiver.cpp
+    huffReceiver.h
     )
 
 project(zad3)

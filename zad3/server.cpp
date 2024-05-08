@@ -98,7 +98,7 @@ SOCKET waitForConnection(SOCKET ListenSocket)
     ClientSocket = INVALID_SOCKET;
 
     // Accept a client socket
-    cout << "SERVER | waiting for connection..." << '\n';
+    cout << "SERVER | waiting for connection...\n";
     ClientSocket = accept(ListenSocket, NULL, NULL);
     if (ClientSocket == INVALID_SOCKET)
     {
@@ -145,7 +145,11 @@ vector<char> receiveFromSocket(SOCKET ClientSocket)
             printf("SERVER | Bytes sent: %d\n", iSendResult);
         }
         else if (iResult == 0)
+        {
             printf("SERVER | Connection closing...\n");
+            closesocket(ClientSocket);
+            WSACleanup();
+        }
         else
         {
             printf("SERVER | recv failed: %d\n", WSAGetLastError());
@@ -156,6 +160,6 @@ vector<char> receiveFromSocket(SOCKET ClientSocket)
 
     } while (iResult > 0);
 
-    cout << "SERVER | End of transmission" << endl;
+    cout << "SERVER | End of transmission\n";
     return fileBuffer;
 }

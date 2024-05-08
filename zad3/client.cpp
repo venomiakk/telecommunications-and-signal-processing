@@ -143,6 +143,6 @@ int sendToSocket(SOCKET ConnectSocket, char *fileBuffer, int dataSize)
             printf("CLIENT | recv failed: %d\n", WSAGetLastError());
     } while (iResult > 0);
 
-    cout << "CLIENT | End of transmission" << endl;
+    cout << "CLIENT | End of transmission\n";
     return 0;
 }

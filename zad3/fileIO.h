@@ -2,6 +2,8 @@
 #define ZAD3_FILEIO_H
 #include <string>
 #include <vector>
+#include <map>
+#include "typedefs.h"
 
 /*!
  * @brief Zapisanie bufora do pliku
@@ -22,6 +24,8 @@ void saveBitsToFile(std::string bits, std::string path);
 
 std::string readBitsFromFile(const std::string &filename);
 
-void test();
+void saveDictToFile(std::vector<HuffmanDictElement> dict, std::string filepath);
+
+std::vector<HuffmanDictElement> readDictFromFile(std::string filepath);
 
 #endif // ZAD3_FILEIO_H
