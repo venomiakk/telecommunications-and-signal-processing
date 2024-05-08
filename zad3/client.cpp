@@ -23,7 +23,7 @@ using namespace std;
 
 WSADATA wsaDataClient;
 
-SOCKET initializeClient()
+SOCKET initializeClient(const char *ipaddr)
 {
     int iResult;
 
@@ -45,7 +45,7 @@ SOCKET initializeClient()
     hints.ai_protocol = IPPROTO_TCP;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(IP_ADDR, DEFAULT_PORT, &hints, &result);
+    iResult = getaddrinfo(ipaddr, DEFAULT_PORT, &hints, &result);
     if (iResult != 0)
     {
         printf("CLIENT | getaddrinfo failed: %d\n", iResult);

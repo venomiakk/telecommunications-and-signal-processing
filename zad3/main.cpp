@@ -148,6 +148,7 @@ int main()
 {
     // thread tServer(receiveHuffmanFile);
     // thread tClient(sendHuffmanFile);
+
     int mode = 0;
     cout << "1. Odbieranie (Serwer)\n2. Wysylanie (Klient)\n";
     cin >> mode;
@@ -158,8 +159,12 @@ int main()
     }
     else
     {
+        string temp;
         cout << "Klient:\n";
-        sendHuffmanFile();
+        cout << "Adres serwera: ";
+        cin >> temp;
+        const char *ipaddr = temp.c_str();
+        sendHuffmanFile(ipaddr);
     }
 
     return 0;

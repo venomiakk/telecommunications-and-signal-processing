@@ -9,34 +9,23 @@
 
 using namespace std;
 
-void sendHuffmanFile()
+void sendHuffmanFile(const char *ipaddr)
 {
-    /* Wysylanie pliku */
+    const unsigned char DIVIDER = 0x3;
     vector<char> file = readFile("input.txt");
     string encodedStr = codeFile(file);
     map<char, string> codes = getDict();
-    int dataSize = encodedStr.size();
-    char fileBuf[dataSize];
-    vector<char> saveHelper;
 
+    int dataSize = encodedStr.size();
+    vector<char> saveHelper;
     for (int i = 0; i < dataSize; i++)
     {
-        fileBuf[i] = encodedStr[i];
         saveHelper.push_back(encodedStr[i]);
     }
-
-    // for (int i = 0; i < dataSize; i++)
-    // {
-    //     cout << fileBuf[i];
-    // }
-
-    SOCKET connSock1 = initializeClient();
-    sendToSocket(connSock1, fileBuf, dataSize);
 
     saveFile("inputEncoded.txt", saveHelper);
     saveBitsToFile(encodedStr, "inputEncodedBin.txt");
 
-    /* Wysylanie slownika */
     vector<HuffmanDictElement> dict;
 
     for (auto v = codes.begin(); v != codes.end(); v++)
@@ -54,12 +43,27 @@ void sendHuffmanFile()
 
     vector<char> dictFile = readFile("inputDict.txt");
     int dictSize = dictFile.size();
-    char dictBuf[dictSize];
+    char fileBuff[dataSize + dictSize + 1];
+    int current = 0;
+    for (int i = 0; i < dataSize; i++)
+    {
+        fileBuff[i] = encodedStr[i];
+        current++;
+    }
+    fileBuff[current] = DIVIDER;
     for (int i = 0; i < dictSize; i++)
     {
-        dictBuf[i] = dictFile.at(i);
+        fileBuff[i + current+1] = dictFile.at(i);
     }
 
-    SOCKET connSock2 = initializeClient();
-    sendToSocket(connSock2, dictBuf, dictSize);
+    cout << "Sent:" << endl;
+    for (int i = 0; i < dataSize + dictSize + 1; i++)
+    {
+        cout << fileBuff[i];
+    }
+    cout << endl;
+    cout << "Sent konice" << endl;
+
+    SOCKET connSock = initializeClient(ipaddr);
+    sendToSocket(connSock, fileBuff, dataSize + dictSize + 1);
 }

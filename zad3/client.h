@@ -5,6 +5,6 @@
 
 int sendToSocket(SOCKET ConnectSocket, char *fileBuffer, int dataSize);
 
-SOCKET initializeClient();
+SOCKET initializeClient(const char *ipaddr);
 
 #endif // ZAD3_CLIENT_H

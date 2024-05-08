@@ -2,25 +2,47 @@
 #include "server.h"
 #include "fileIO.h"
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
 void receiveHuffmanFile()
 {
+    const unsigned char DIVIDER = 0x3;
     SOCKET ListenSocket = initializeServer();
-
-    SOCKET ClientSocket1 = waitForConnection(ListenSocket);
-    vector<char> file = receiveFromSocket(ClientSocket1);
-    saveFile("encoded.txt", file);
-    string encoded;
+    SOCKET ClientSocket = waitForConnection(ListenSocket);
+    vector<char> file = receiveFromSocket(ClientSocket);
+    int fileSize = file.size();
+    vector<char> data;
+    vector<char> dictFile;
+    cout << "Received" << endl;
+    int stop = 0;
+    for (int i = 0; i < fileSize; i++)
+    {
+        if (file.at(i) == DIVIDER)
+        {
+            file.erase(file.begin(), file.begin() + i + 1);
+            break;
+        }
+        cout << file.at(i);
+        data.push_back(file.at(i));
+        stop++;
+    }
     for (auto c : file)
+    {
+        cout << c;
+        dictFile.push_back(c);
+    }
+    cout << endl;
+    cout << "Received koniec" << endl;
+
+    saveFile("encoded.txt", data);
+    string encoded;
+    for (auto c : data)
     {
         encoded += c;
     }
     saveBitsToFile(encoded, "encodedBin.txt");
-
-    SOCKET ClientSocket2 = waitForConnection(ListenSocket);
-    vector<char> dictFile = receiveFromSocket(ClientSocket2);
     saveFile("dict.txt", dictFile);
 
     vector<HuffmanDictElement> dict = readDictFromFile("dict.txt");
