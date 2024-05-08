@@ -25,15 +25,15 @@ void server()
         cout << c;
     }
     cout << "\n";
-
-    cout << "Server - 2nd send" << endl;
-    SOCKET ClientSocket2 = waitForConnection(ListenSocket);
-    file = receiveFromSocket(ClientSocket2);
-    for (auto c : file)
-    {
-        cout << c;
-    }
-    cout << "\n";
+    system("pause");
+    // cout << "Server - 2nd send" << endl;
+    // SOCKET ClientSocket2 = waitForConnection(ListenSocket);
+    // file = receiveFromSocket(ClientSocket2);
+    // for (auto c : file)
+    // {
+    //     cout << c;
+    // }
+    // cout << "\n";
 }
 
 void client()
@@ -47,16 +47,17 @@ void client()
         fileBuf[i] = fileV.at(i);
     }
 
-    SOCKET connSock = initializeClient();
-    sendToSocket(connSock, fileBuf, dataSize);
+    system("pause");
+    // SOCKET connSock = initializeClient();
+    // sendToSocket(connSock, fileBuf, dataSize);
 
-    for (int i = 0; i < dataSize; i++)
-    {
-        fileBuf[i] = fileV.at(i);
-    }
-    cout << "CLIENT - 2nd send" << endl;
-    SOCKET connSock2 = initializeClient();
-    sendToSocket(connSock2, fileBuf, dataSize);
+    // for (int i = 0; i < dataSize; i++)
+    // {
+    //     fileBuf[i] = fileV.at(i);
+    // }
+    // cout << "CLIENT - 2nd send" << endl;
+    // SOCKET connSock2 = initializeClient();
+    // sendToSocket(connSock2, fileBuf, dataSize);
 }
 
 void testfunc()
@@ -148,14 +149,16 @@ int main()
     // thread tServer(receiveHuffmanFile);
     // thread tClient(sendHuffmanFile);
     int mode = 0;
-    cout << "1. Odbieranie (Serwer)\n.2 Wysylanie (Klient)\n";
+    cout << "1. Odbieranie (Serwer)\n2. Wysylanie (Klient)\n";
     cin >> mode;
     if (mode == 1)
     {
+        cout << "Serwer:\n";
         receiveHuffmanFile();
     }
     else
     {
+        cout << "Klient:\n";
         sendHuffmanFile();
     }
 
