@@ -72,3 +72,5 @@ bin/
 # input
 # output
 build/
+/zad4/__pycache__
+*.wav
