@@ -40,7 +40,11 @@ def calculate_snr(original_signal, quantized_signal):
 
 def calculate_snr_noise(signal):
     signal = np.frombuffer(signal, dtype=np.int16)
-    wf = wave.open("noise.wav", 'rb')
+    try:
+        wf = wave.open('noise.wav', 'rb')
+    except FileNotFoundError:
+        print("Plik nie został znaleziony.")
+        return False
     frames = []
     data = wf.readframes(CHUNK)
     frames.append(data)
