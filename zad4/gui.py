@@ -61,7 +61,7 @@ def show_interface():
     playRecBtn = tk.Button(text="Odtwórz", command=lambda: play_recorded_audio('recorded_audio.wav'))
     playRecBtn.place(x=40, y=300)
     
-    sendRecBtn = tk.Button(text="Wyślij", command=lambda: sender.send_file(HOST_REC, PORT))
+    sendRecBtn = tk.Button(text="Wyślij", command=lambda: sender.send_file(HOST, PORT))
     sendRecBtn.place(x=40, y=400)
 
     titleLabel4 = tk.Label(root, text="Czas rzeczywisty")
