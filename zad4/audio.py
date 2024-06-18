@@ -20,6 +20,7 @@ def quantize(data, levels):
 
 def dequantize(quantized_data, levels):
     # np type?
+    quantized_data = np.frombuffer(quantized_data, dtype=np.int16)
     X_min = np.min(quantized_data)
     X_max = np.max(quantized_data)
     delta = (X_max - X_min) / (levels - 1)
@@ -35,6 +36,24 @@ def calculate_snr(original_signal, quantized_signal):
     snr = 10 * np.log10(signal_power / noise_power)
     print(f"SNR: {snr}")
     return snr
+
+
+def calculate_snr_noise(signal):
+    signal = np.frombuffer(signal, dtype=np.int16)
+    wf = wave.open("noise.wav", 'rb')
+    frames = []
+    data = wf.readframes(CHUNK)
+    frames.append(data)
+    while len(data) > 0:
+        data = wf.readframes(CHUNK)
+        frames.append(data)
+
+    noise = b''.join(frames)
+    noise = np.frombuffer(noise, dtype=np.int16)
+    noise_p = np.mean(np.square(noise))
+    signal_p = np.mean(np.square(signal))
+    snr = 10 * np.log10(signal_p / noise_p)
+    print(f"Noise snr: {snr}")
 
 
 def stop_recording():
@@ -89,7 +108,7 @@ def play_audio(filename):
     try:
         wf = wave.open(filename, 'rb')
     except FileNotFoundError:
-        print("Plik 'recorded_audio.wav' nie został znaleziony.")
+        print("Plik nie został znaleziony.")
         return False
 
     p = pyaudio.PyAudio()
@@ -111,16 +130,25 @@ def play_audio(filename):
 
     return True
 
-def load_recording():
-    # Wczytanie pliku WAV
-    WAVE_OUTPUT_FILENAME = "recorded_audio.wav"
-    wf = wave.open(WAVE_OUTPUT_FILENAME, 'rb')
+def calculate_snr_from_file(file, qlvl):
+    print(file)
+    try:
+        wf = wave.open(file, 'rb')
+    except FileNotFoundError:
+        print("Plik nie został znaleziony.")
+        return False
 
-    # Konfiguracja audio z pliku WAV
-    FORMAT = pyaudio.paInt16
-    CHANNELS = wf.getnchannels()
-    RATE = wf.getframerate()
-    CHUNK = 1024
+    frames = []
+    data = wf.readframes(CHUNK)
+    frames.append(data)
+    while len(data) > 0:
+        data = wf.readframes(CHUNK)
+        frames.append(data)
+
+    audio_data = b''.join(frames)
+    audio_quantized = quantize(audio_data, qlvl)
+    calculate_snr_noise(audio_data)
+    return np.round(calculate_snr(audio_data, audio_quantized), 2)
 
 if __name__ == "__main__":
     print("audio module")

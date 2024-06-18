@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 import re
 import threading
 import time
@@ -30,6 +30,9 @@ def show_interface():
     canvas.create_line(400, 100, 400, 500)
 
     validate_int = root.register(only_int)
+
+    sign = tk.Label(root, text="Adrian Michałek, Hanna Mikołajczyk, Maksymilian Paluśkiewicz")
+    sign.place(x=5, y=5)
 
     label_sr = tk.Label(root, text="Częstotliwość próbkowania [Hz]:")
     label_sr.place(x=50, y=50)
@@ -69,6 +72,9 @@ def show_interface():
 
     rtStopBtn = tk.Button(text="Stop", command=lambda: stop_sending_audio())
     rtStopBtn.place(x=150, y=250)
+
+    rtSendPlayBtn = tk.Button(text="Odtwórz", command=lambda: play_recorded_audio('rt_audio_send.wav'))
+    rtSendPlayBtn.place(x=150, y=300)
     #endregion
 
     #region Nagrywanie do pliku
@@ -84,7 +90,7 @@ def show_interface():
         startRecBtn.config(state="normal")
         audio.stop_recording()
         
-        frame = tk.Frame(root, width=100, height=50, bg='#ffffff') #f0f0f0
+        frame = tk.Frame(root, width=100, height=50, bg='#f0f0f0') #f0f0f0
         frame.place(x=10, y=340)
         
         # :(
@@ -111,6 +117,15 @@ def show_interface():
     def stop_sending_audio():
         sender.set_is_rt_sending()
         rtSendBtn.config(state="normal")
+
+        frame = tk.Frame(root, width=100, height=50, bg='#f0f0f0') #f0f0f0
+        frame.place(x=150, y=350)
+        
+        time.sleep(0.2)
+        snr = sender.LAST_SNR
+        snrLab = tk.Label(root, text=f"SNR: {snr} dB")
+        snrLab.place(x=150, y=350)
+
     #endregion
 
     #region Odbieranie przyciski
@@ -128,6 +143,9 @@ def show_interface():
 
     rtReceiveBtn = tk.Button(text="Odbieraj", command=lambda: start_receiving_audio())
     rtReceiveBtn.place(x=550, y=200)
+
+    rtReceivePlayBtn = tk.Button(text="Odtwórz", command=lambda: play_recorded_audio('rt_audio_rec.wav'))
+    rtReceivePlayBtn.place(x=550, y=250)
     #endregion
 
     #region Odbieranie RT
@@ -146,6 +164,49 @@ def show_interface():
         
         rtReceiveBtn.config(state="normal")
 
+        frame = tk.Frame(root, width=100, height=50, bg='#f0f0f0') #f0f0f0
+        frame.place(x=550, y=300)
+        
+        time.sleep(0.2)
+        snr = receiver.LAST_SNR
+        snrLab = tk.Label(root, text=f"SNR: {snr} dB")
+        snrLab.place(x=550, y=300)
+
+    #endregion
+
+    #region SNR
+    selectR = ttk.Combobox(
+        state="readonly",
+        values=[" Nagranie", " Przesłane nagranie", " rt Nagranie", " rt Przesłane nagranie"],
+        width=24
+    )
+    selectR.place(x=220, y=500)
+    selectR.set("Nagranie")
+
+    snrBtn = tk.Button(text="Oblicz SNR", command=lambda: calc_snr())
+    snrBtn.place(x=250, y=540)
+    
+    def calc_snr():
+        selected = selectR.current()  # Odczytaj wartość z comboboxa
+        print(f"Selected value: {selected}")
+        file = "recorded_audio.wav"
+        if selected == 1:
+            file = "downloaded.wav"
+        elif selected == 2:
+            file = "rt_audio_send.wav"
+        elif selected == 3:
+            file = "rt_audio_rec.wav"
+
+        ql = int(quantization_lvl.get())
+        ql = 2 ** ql
+
+        snr = audio.calculate_snr_from_file(file, ql)
+        #TODO sprawdzic snry
+        frame = tk.Frame(root, width=100, height=50, bg='#f0f0f0') #f0f0f0
+        frame.place(x=430, y=530)
+
+        snrLab = tk.Label(root, text=f"SNR: {snr} dB")
+        snrLab.place(x=430, y=530)
     #endregion
 
     root.mainloop() 

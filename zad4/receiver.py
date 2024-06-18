@@ -3,6 +3,10 @@ import pyaudio
 import wave
 import threading
 import audio
+import numpy as np
+
+
+LAST_SNR = -1.0
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -41,14 +45,15 @@ def audio_stream_receive(host, port, sample_rate, quantization_lvl, filename="rt
                     frames_per_buffer=CHUNK)
 
     frames = []
+    frames_q = []
     try:
         while True:
             data = conn.recv(CHUNK)
             if not data:
                 break
-            # data = audio.quantize(data, quantization_lvl)
             stream.write(data)
             frames.append(data)
+            frames_q.append(data)
     except KeyboardInterrupt:
         pass
 
@@ -61,6 +66,11 @@ def audio_stream_receive(host, port, sample_rate, quantization_lvl, filename="rt
     print("Serwer zakończył działanie")
 
     audio_data = b''.join(frames)
+    audio_data_q = b''.join(frames_q)
+    audio_data_q = audio.quantize(audio_data_q, quantization_lvl)
+    snr = audio.calculate_snr(audio_data, audio_data_q)
+    global LAST_SNR
+    LAST_SNR = np.round(snr, 2)
 
     wf = wave.open(filename, 'wb')
     wf.setnchannels(CHANNELS)
