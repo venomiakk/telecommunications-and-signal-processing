@@ -18,24 +18,16 @@ def set_is_rt_sending():
 
 
 def send_file(host, port, filename='recorded_audio.wav'):
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((host, port))
-    server_socket.listen(1)
-    print(f"Serwer nasłuchuje na {host}:{port}")
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect((host, port))
+    print(f"Połączono z serwerem {host}:{port}")
 
-    while True:
-        conn, addr = server_socket.accept()
-        print(f"Połączono z {addr}")
+    with open(filename, 'rb') as f:
+        while (chunk := f.read(1024)):
+            client_socket.sendall(chunk)
 
-        with open(filename, 'rb') as f:
-            while (chunk := f.read(1024)):
-                conn.sendall(chunk)
-
-        conn.close()
-        print(f"Plik {filename} został wysłany do {addr}")
-    
-        server_socket.close()
-        break
+    client_socket.close()
+    print(f"Plik {filename} został wysłany do {host}:{port}")
 
 
 def audio_stream_send(host, port, sample_rate, quantization_lvl, filename="rt_audio_send.wav"):

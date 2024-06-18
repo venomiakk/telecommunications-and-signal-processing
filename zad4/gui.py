@@ -7,9 +7,8 @@ import audio
 import receiver
 import sender
 
-
-HOST_RT = '192.168.8.112'
-HOST_REC = '192.168.8.112'
+#ADRES IP ODBIERAJACEGO
+HOST = '192.168.8.112'
 PORT = 65432
 
 RT_BLOCK_BTN = threading.Event()
@@ -113,7 +112,7 @@ def show_interface():
         sr = int(sample_rate.get())
         ql = int(quantization_lvl.get())
         ql = 2 ** ql
-        threading.Thread(target=sender.audio_stream_send, args=(HOST_RT, PORT, sr, ql)).start()
+        threading.Thread(target=sender.audio_stream_send, args=(HOST, PORT, sr, ql)).start()
     
     def stop_sending_audio():
         sender.set_is_rt_sending()
@@ -133,7 +132,7 @@ def show_interface():
     titleLabel2 = tk.Label(root, text="Odbieranie\npliku")
     titleLabel2.place(x=440, y=150)
 
-    downloadRecBtn = tk.Button(text="Pobierz", command=lambda: receiver.download_file(HOST_RT, PORT))
+    downloadRecBtn = tk.Button(text="Pobierz", command=lambda: receiver.download_file(HOST, PORT))
     downloadRecBtn.place(x=450, y=200)
 
     playDwnRecBtn = tk.Button(text="Odtwórz", command=lambda: play_recorded_audio('downloaded.wav'))
@@ -154,7 +153,7 @@ def show_interface():
         sr = int(sample_rate.get())
         ql = int(quantization_lvl.get())
         ql = 2 ** ql
-        threading.Thread(target=receiver.audio_stream_receive, args=(HOST_RT, PORT, sr, ql)).start()
+        threading.Thread(target=receiver.audio_stream_receive, args=(HOST, PORT, sr, ql)).start()
         threading.Thread(target=block_receiving_btn).start()
         # block_receiving_btn()
 

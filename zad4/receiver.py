@@ -15,8 +15,13 @@ CHANNELS = 1
 RT_BLOCK_BTN = threading.Event()
 
 def download_file(host, port, filename='downloaded.wav'):
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect((host, port))
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind((host, port))
+    server_socket.listen(1)
+    print(f"Serwer nasłuchuje na {host}:{port}")
+
+    client_socket, addr = server_socket.accept()
+    print(f"Połączono z {addr}")
 
     with open(filename, 'wb') as f:
         while True:
