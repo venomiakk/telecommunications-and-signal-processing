@@ -38,27 +38,6 @@ def calculate_snr(original_signal, quantized_signal):
     return snr
 
 
-def calculate_snr_noise(signal):
-    signal = np.frombuffer(signal, dtype=np.int16)
-    try:
-        wf = wave.open('noise.wav', 'rb')
-    except FileNotFoundError:
-        print("Plik nie został znaleziony.")
-        return False
-    frames = []
-    data = wf.readframes(CHUNK)
-    frames.append(data)
-    while len(data) > 0:
-        data = wf.readframes(CHUNK)
-        frames.append(data)
-
-    noise = b''.join(frames)
-    noise = np.frombuffer(noise, dtype=np.int16)
-    noise_p = np.mean(np.square(noise))
-    signal_p = np.mean(np.square(signal))
-    snr = 10 * np.log10(signal_p / noise_p)
-    print(f"Noise snr: {snr}")
-
 
 def stop_recording():
     global IS_RECORDING
@@ -92,6 +71,8 @@ def start_recording(sample_rate, quantization_lvl):
     stream.stop_stream()
     stream.close()
     audio.terminate()
+
+    print(type(frames[0]))
 
     audio_data = b''.join(frames)
     quantized_audio = quantize(audio_data, quantization_lvl)
@@ -149,9 +130,9 @@ def calculate_snr_from_file(file, qlvl):
         data = wf.readframes(CHUNK)
         frames.append(data)
 
+    print(type(frames[0]))
     audio_data = b''.join(frames)
     audio_quantized = quantize(audio_data, qlvl)
-    # calculate_snr_noise(audio_data)
     #? czemu nie dzialasz zawsze tak samo??
     return np.round(calculate_snr(audio_data, audio_quantized), 2)
 
