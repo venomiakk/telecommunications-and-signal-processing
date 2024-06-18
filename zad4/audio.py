@@ -85,9 +85,9 @@ def start_recording(sample_rate, quantization_lvl):
 
 
 
-def play_audio():
+def play_audio(filename):
     try:
-        wf = wave.open('recorded_audio.wav', 'rb')
+        wf = wave.open(filename, 'rb')
     except FileNotFoundError:
         print("Plik 'recorded_audio.wav' nie został znaleziony.")
         return False
