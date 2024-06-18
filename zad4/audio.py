@@ -151,7 +151,8 @@ def calculate_snr_from_file(file, qlvl):
 
     audio_data = b''.join(frames)
     audio_quantized = quantize(audio_data, qlvl)
-    calculate_snr_noise(audio_data)
+    # calculate_snr_noise(audio_data)
+    #? czemu nie dzialasz zawsze tak samo??
     return np.round(calculate_snr(audio_data, audio_quantized), 2)
 
 if __name__ == "__main__":
