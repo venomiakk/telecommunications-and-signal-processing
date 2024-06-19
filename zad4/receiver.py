@@ -14,6 +14,8 @@ CHANNELS = 1
 
 RT_BLOCK_BTN = threading.Event()
 
+
+# Funkcja pobierajaca plik dzwiekowy
 def download_file(host, port, filename='downloaded.wav'):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
@@ -33,6 +35,8 @@ def download_file(host, port, filename='downloaded.wav'):
     client_socket.close()
     print(f"Plik {filename} został pobrany")
 
+
+# Funkcja odbierajaca sygnal dzwiekowy w czasie rzeczywistym
 def audio_stream_receive(host, port, sample_rate, quantization_lvl, filename="rt_audio_rec.wav"):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))

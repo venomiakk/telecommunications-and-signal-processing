@@ -16,7 +16,7 @@ def set_is_rt_sending():
     IS_RT_SENDING = False
 
 
-
+#Funkcja wysylajaca plik audio
 def send_file(host, port, filename='recorded_audio.wav'):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((host, port))
@@ -30,6 +30,7 @@ def send_file(host, port, filename='recorded_audio.wav'):
     print(f"Plik {filename} został wysłany do {host}:{port}")
 
 
+# Funkcja wysylajaca dzwiek w czasie rzeczywistym
 def audio_stream_send(host, port, sample_rate, quantization_lvl, filename="rt_audio_send.wav"):
     print(sample_rate, quantization_lvl)
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -65,7 +66,7 @@ def audio_stream_send(host, port, sample_rate, quantization_lvl, filename="rt_au
     audio_data = b''.join(frames)
     audio_data_q = b''.join(frames_q)
     audio_data_q = audio.quantize(audio_data_q, quantization_lvl)
-    snr = audio.calculate_snr(audio_data, audio_data_q)
+    snr = audio.calculate_snr(audio_data, audio_data_q, quantization_lvl)
     global LAST_SNR
     LAST_SNR = np.round(snr, 2)
 

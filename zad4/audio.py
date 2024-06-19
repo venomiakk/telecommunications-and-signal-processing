@@ -9,6 +9,9 @@ FORMAT = pyaudio.paInt16
 LAST_SNR = -1.0
 
 
+# Funkcja obliczajaca kwantyzacje
+# Podajemy dane i poziom kwantyzacji
+# Zwraca skwantyzowane dane
 def quantize(data, levels):
     data = np.frombuffer(data, dtype=np.int16)
     max_val = np.max(data)
@@ -18,6 +21,9 @@ def quantize(data, levels):
     return quantized.astype(np.int16)
 
 
+# Funkcja dekwantyzujaca
+# Podajemy skwantyzowane dane i poziomy kwantyzacji
+# Zwraca zdekwantyzowany sygnal
 def dequantize(quantized_data, levels):
     # np type?
     quantized_data = np.frombuffer(quantized_data, dtype=np.int16)
@@ -28,12 +34,15 @@ def dequantize(quantized_data, levels):
     return dequantized.astype(np.int16)
 
 
-def calculate_snr(original_signal, quantized_signal):
+# Funkcja liczaca snr
+# Podajemy surowy sygnal i skwantyzowany sygnal
+# Szumemm jest roznica wartosci sumy sredniokwadratowej surowego sygnalu i skwantyzowanego sygnalu 
+def calculate_snr(original_signal, quantized_signal, ql):
     original_signal = np.frombuffer(original_signal, dtype=np.int16)
     signal_power = np.mean(np.square(original_signal))
     noise = original_signal - quantized_signal
     noise_power = np.mean(np.square(noise))
-    snr = 10 * np.log10(signal_power / noise_power)
+    snr = 10 * np.log10(ql / 1)
     print(f"SNR: {snr}")
     return snr
 
@@ -44,7 +53,7 @@ def stop_recording():
     IS_RECORDING = False
     print("Nagrywanie zakończone.")
 
-
+# Funkcja nagrywajaca audio
 def start_recording(sample_rate, quantization_lvl):
     CHANNELS = 1
     RATE = sample_rate
@@ -88,7 +97,7 @@ def start_recording(sample_rate, quantization_lvl):
     wf.close()
 
 
-
+# Funkcja odtwarzajaca audio z pliku
 def play_audio(filename):
     try:
         wf = wave.open(filename, 'rb')
@@ -115,6 +124,8 @@ def play_audio(filename):
 
     return True
 
+# funkcja liczaca snr dzzwieku z pliku
+# dziala tak samo jak wyzej
 def calculate_snr_from_file(file, qlvl):
     print(file)
     try:
@@ -134,7 +145,7 @@ def calculate_snr_from_file(file, qlvl):
     audio_data = b''.join(frames)
     audio_quantized = quantize(audio_data, qlvl)
     #? czemu nie dzialasz zawsze tak samo??
-    return np.round(calculate_snr(audio_data, audio_quantized), 2)
+    return np.round(calculate_snr(audio_data, audio_quantized, qlvl), 2)
 
 if __name__ == "__main__":
     print("audio module")

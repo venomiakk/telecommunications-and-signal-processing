@@ -8,7 +8,7 @@ import receiver
 import sender
 
 #ADRES IP ODBIERAJACEGO
-HOST = 'localhost'
+HOST = '192.168.223.136'
 PORT = 65432
 
 RT_BLOCK_BTN = threading.Event()
